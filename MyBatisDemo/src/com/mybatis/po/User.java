@@ -12,6 +12,20 @@ public class User implements Serializable{
 	private Date birthday;
 	private String sex;
 	private String address;
+	
+	
+	
+	public User(String username, Date birthday, String sex, String address) {
+		super();
+		this.username = username;
+		this.birthday = birthday;
+		this.sex = sex;
+		this.address = address;
+	}
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public Integer getId() {
 		return id;
 	}
