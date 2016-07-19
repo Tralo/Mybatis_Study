@@ -1,47 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- namespace命名空间，作用就是对sql进行分类化管理，即sql隔离
-注意：使用mapper代理方法开发的话，namespace就有特殊重要的作用了
- -->
+<!-- namespace命名空间，作用就是对sql进行分类化管理，即sql隔离 注意：使用mapper代理方法开发的话，namespace就有特殊重要的作用了 -->
 <mapper namespace="com.mybatis.mapper.UserMapper">
-	
-	
+
+	<!-- <resultMap>中的type属性表示 resultMap最终映射的Java对象类型。上面用的是别名，如果没有定义别名，需要使用完全限定名 
+		<resultMap>中的id属性是对这个resultMap的唯一标识。 <resultMap>的子标签<id>表示查询结果集中的唯一标识，因为id是主键。 
+		<resultMap>的子标签<result>表示对查询结果集中普通名映射的定义。 子标签中的column属性：表示查询出来的列名 子标签中的property属性：表示上面type指定的pojo类型中的属性名 -->
+	<resultMap type="User" id="userResultMap">
+		<id column="id_" property="id" />
+		<result column="username_" property="username" />
+	</resultMap>
+
 	<select id="findUserById" parameterType="int" resultType="user">
-		select * from user where id = #{id}
+		select
+		* from user where id = #{id}
 	</select>
-	
-	<!-- 
-	1.resultType：这里虽然是查询多条记录，但是resultType指定的就是单条记录所映射的java对象类型。
-	2.${}：表示拼接sql串，将接收到的参数的内容不加任何的修饰拼接在sql中,${}中只能使用value，
-		但是使用${}来拼接sql，可能会引起sql注入，所以不建议使用这种方法。
-	
-	 -->
-	<select id="findUserByName" parameterType="java.lang.String" resultType="User">
+
+	<!-- 1.resultType：这里虽然是查询多条记录，但是resultType指定的就是单条记录所映射的java对象类型。 2.${}：表示拼接sql串，将接收到的参数的内容不加任何的修饰拼接在sql中,${}中只能使用value， 
+		但是使用${}来拼接sql，可能会引起sql注入，所以不建议使用这种方法。 -->
+	<select id="findUserByName" parameterType="java.lang.String"
+		resultType="User">
 		select * from user where username like '%${value}%'
 	</select>
-	
-	<select id="findAllUser" parameterType="java.lang.String" resultType="User">
+
+	<select id="findAllUser" parameterType="java.lang.String"
+		resultType="User">
 		select * from user
 	</select>
-	
-	
+
+
 	<insert id="insertUser" parameterType="User">
-		insert into user(username,birthday,sex,address) values(#{username},#{birthday},#{sex},#{address})
+		insert into user(username,birthday,sex,address)
+		values(#{username},#{birthday},#{sex},#{address})
 		<!-- 将插入数据的主键返回，返回到user对象中 -->
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-            select last_insert_id()
-        </selectKey>
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select
+			last_insert_id()
+		</selectKey>
 	</insert>
-	
+
 	<!-- 删除用户 -->
 	<delete id="deleteUser" parameterType="java.lang.Integer">
-		delete from user where id=#{id}
+		delete from user where
+		id=#{id}
 	</delete>
 	<!-- 更新用户 -->
 	<update id="updateUser" parameterType="User">
-		update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id=#{id};
+		update user set
+		username=#{username},birthday=#{birthday},sex=#{sex},address=#{address}
+		where id=#{id};
 	</update>
+
+	<select id="findUserList" parameterType="UserQueryVo"
+		resultType="User">
+		select * from user where user.sex = #{user.sex} and
+		user.username like '%${user.username}%'
+	</select>
+
+	<select id="findUserByIdResultMap" parameterType="int"
+		resultMap="userResultMap">
+		SELECT id id_,username username_ from user where id = #{id}
+	</select>
+
+
 </mapper>

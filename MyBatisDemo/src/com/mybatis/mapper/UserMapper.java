@@ -3,6 +3,7 @@ package com.mybatis.mapper;
 import java.util.List;
 
 import com.mybatis.po.User;
+import com.mybatis.po.UserQueryVo;
 
 public interface UserMapper {
 
@@ -42,5 +43,19 @@ public interface UserMapper {
 	 */
 	public void updateUser(User user) throws Exception;
 	
+	/**
+	 * 用户信息综合查询
+	 * @param userQueryVo
+	 * @return
+	 * @throws Exception
+	 */
+    public List<User> findUserList(UserQueryVo userQueryVo) throws Exception;
+	
+    /**
+     * 根据id查询用户信息，使用resultMap输出
+     * @param id
+     * @return
+     */
+    public User findUserByIdResultMap(int id);
 	
 }

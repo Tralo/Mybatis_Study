@@ -12,7 +12,9 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mybatis.mapper.UserMapper;
 import com.mybatis.po.User;
+import com.mybatis.po.UserQueryVo;
 
 public class MybatisFirst {
 
@@ -107,4 +109,31 @@ public class MybatisFirst {
     	System.out.println("count = "+count);
     }
     
+    @Test
+    public void testFindUserList() throws Exception{
+    	SqlSession sqlSession = getSession();
+    	
+    	UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+    	UserQueryVo userQueryVo = new UserQueryVo();
+    	User u = new User();
+    	u.setSex("f");
+    	u.setUsername("an");
+    	userQueryVo.setUser(u);
+    	List<User> users = userMapper.findUserList(userQueryVo);
+    	
+    	System.out.println(users);
+    	sqlSession.close();
+    	
+    }
+    @Test
+    public void testFindUserByIdResultMap() throws Exception {
+
+        SqlSession sqlSession = getSession();
+        //创建UserMapper对象，mybatis自动生成mapper代理对象
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+        User user = userMapper.findUserByIdResultMap(4);
+        sqlSession.close();
+        System.out.println(user);
+    }
 }
